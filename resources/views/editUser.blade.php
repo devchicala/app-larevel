@@ -22,7 +22,7 @@
         <label for="">Senha do usuário:</label>
         <input type="password" name="password">
 
-        <input type="submit" value="Cadastrar usuário">
+        <input type="submit" value="Editar usuário">
     </form>
 
 </body>

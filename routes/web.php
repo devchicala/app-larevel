@@ -31,4 +31,7 @@ Route::get('usuarios/{user}', [TestController::class,'listUser'])->name('users.l
 Route::post('usuarios/store', [TestController::class,'storeUSer'])->name('users.store');
 
 /*VERBO PUT/PATCH*/
-Route::post('usuarios/edit/{user}', [TestController::class,'editUSer'])->name('users.edit');
+Route::put('usuarios/edit/{user}', [TestController::class,'editUSer'])->name('users.edit');
+
+/*VERBO DELETE*/
+Route::delete('usuarios/delete/{user}', [TestController::class,'deleteUser'])->name('users.delete');
