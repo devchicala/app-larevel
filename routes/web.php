@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Form\TestController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,3 +36,8 @@ Route::put('usuarios/edit/{user}', [TestController::class,'editUSer'])->name('us
 
 /*VERBO DELETE*/
 Route::delete('usuarios/delete/{user}', [TestController::class,'deleteUser'])->name('users.delete');
+
+/* --- ---- ---*/
+
+Route::get('/', [PostController::class,'showForm']);
+Route::post('/debug', [PostController::class,'debug'])->name('debug');
