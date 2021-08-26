@@ -19,6 +19,7 @@ class PostController extends Controller
         $post->subtitle = $request->subtitle;
         $post->content = $request->content;
         $post->save();
-        //$post->create($request->except(['_token']));
+        
+        $post->create($request->except(['_token']));
     }
 }
