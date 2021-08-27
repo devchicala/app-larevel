@@ -9,7 +9,14 @@ use Illuminate\Support\Str;
 class Post extends Model
 {
     use HasFactory;
+
     protected $table = 'posts';
+
+    protected $fillable =  [
+        'title',
+        'subtitle',
+        'content'
+    ];
 
     public function setTitleAttribute($value)
     {

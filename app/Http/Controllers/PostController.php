@@ -15,10 +15,10 @@ class PostController extends Controller
     public function debug(Request $request)
     {
         $post = new Post();
-        $post->title = $request->title;
+        /*$post->title = $request->title;
         $post->subtitle = $request->subtitle;
         $post->content = $request->content;
-        $post->save();
+        $post->save();*/
         
         $post->create($request->except(['_token']));
     }
