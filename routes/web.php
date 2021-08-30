@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Form\TestController;
 use App\Http\Controllers\PostController;
@@ -20,24 +21,36 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-/*VERBO GET*/
-Route::get('listagem-usuario', [UserController::class,'listUser']);
 
-Route::get('usuarios', [TestController::class,'listAllUsers'])->name('users.listAll');
+/*VERBO GET*/
+
+//Route::get('listagem-usuario', [UserController::class,'listUser']);
+
+//Route::get('usuarios', [TestController::class,'listAllUsers'])->name('users.listAll');
 Route::get('usuarios/novo', [TestController::class,'formAddUser'])->name('users.formAddUser');
-Route::get('usuarios/editar/{user}', [TestController::class,'formEditUser'])->name('users.formEditUser');
-Route::get('usuarios/{user}', [TestController::class,'listUser'])->name('users.list');
+//Route::get('usuarios/editar/{user}', [TestController::class,'formEditUser'])->name('users.formEditUser');
+//Route::get('usuarios/{user}', [TestController::class,'listUser'])->name('users.list');
+
 
 /*VERBO POST*/
+
 Route::post('usuarios/store', [TestController::class,'storeUSer'])->name('users.store');
 
 /*VERBO PUT/PATCH*/
-Route::put('usuarios/edit/{user}', [TestController::class,'editUSer'])->name('users.edit');
+
+//Route::put('usuarios/edit/{user}', [TestController::class,'editUSer'])->name('users.edit');
 
 /*VERBO DELETE*/
-Route::delete('usuarios/delete/{user}', [TestController::class,'deleteUser'])->name('users.delete');
+
+//Route::delete('usuarios/delete/{user}', [TestController::class,'deleteUser'])->name('users.delete');
+
 
 /* --- ---- ---*/
 
 Route::get('/', [PostController::class,'showForm']);
 Route::post('/debug', [PostController::class,'debug'])->name('debug');
+
+/* RELATIONSHIP */
+
+Route::get('/usuario/{id}', [UserController::class,'show']);
+Route::get('/endereco/{address}', [AddressController::class,'show']);

@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Adress;
+use App\Models\Address;
 use Illuminate\Http\Request;
 
-class AdressController extends Controller
+class AddressController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,21 +41,33 @@ class AdressController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Adress  $adress
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Adress $adress)
+    public function show(Address $address)
     {
-        //
+        if ($address)
+        {
+            echo "<h1>Endereço</h1>";
+            echo "<p>Endereço Completo: {$address->street}, {$address->number}, {$address->city}, {$address->state}</p>";
+        }
+
+        $user = $address->user()->first();
+
+        if ($user)
+        {
+            echo "<h1>Usuários</h1>";
+            echo "<p>Dados do usuário: {$user->name}, {$user->email}, {$user->password}</p>";
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Adress  $adress
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Adress $adress)
+    public function edit($id)
     {
         //
     }
@@ -64,10 +76,10 @@ class AdressController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Adress  $adress
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Adress $adress)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -75,10 +87,10 @@ class AdressController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Adress  $adress
+     * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Adress $adress)
+    public function destroy($id)
     {
         //
     }
