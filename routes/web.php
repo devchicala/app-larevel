@@ -27,7 +27,7 @@ Route::get('/', function () {
 //Route::get('listagem-usuario', [UserController::class,'listUser']);
 
 //Route::get('usuarios', [TestController::class,'listAllUsers'])->name('users.listAll');
-Route::get('usuarios/novo', [TestController::class,'formAddUser'])->name('users.formAddUser');
+Route::get('teste/novo', [TestController::class,'formAddUser'])->name('users.formAddUser');
 //Route::get('usuarios/editar/{user}', [TestController::class,'formEditUser'])->name('users.formEditUser');
 //Route::get('usuarios/{user}', [TestController::class,'listUser'])->name('users.list');
 
@@ -54,3 +54,5 @@ Route::post('/debug', [PostController::class,'debug'])->name('debug');
 
 Route::get('/usuario/{id}', [UserController::class,'show']);
 Route::get('/endereco/{address}', [AddressController::class,'show']);
+Route::get('/artigo/{post}', [PostController::class,'show']);
+

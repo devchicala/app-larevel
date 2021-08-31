@@ -36,11 +36,18 @@ class UserController extends Controller
 
         $address = $user->address()->first();
 
-        if ($address)
-        {
+        if ($address) {
             echo "<h1>Endereço</h1>";
             echo "<p>Endereço Completo: {$address->street}, {$address->number}, {$address->city}, {$address->state}</p>";
         }
+
+        $posts = $user->posts()->get();
+
+        if ($posts) {
+            echo "<h1>Artigos</h1>";
+            foreach ($posts as $post) {
+                echo "<p>#{$post->id}, {$post->title}, {$post->content}";
+            }
+        }
     }
 }
- 

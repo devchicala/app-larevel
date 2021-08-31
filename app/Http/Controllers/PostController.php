@@ -19,7 +19,20 @@ class PostController extends Controller
         $post->subtitle = $request->subtitle;
         $post->content = $request->content;
         $post->save();*/
-        
+
         $post->create($request->except(['_token']));
+    }
+
+    public function show(Post $post)
+    {
+        echo "<h1>Artigo</h1>";
+        echo "<p>#{$post->id}, {$post->title}, {$post->content}</p>";
+
+        $user = $post->author()->first();
+
+        if ($user) {
+            echo "<h1>Author</h1>";
+            echo "<p>Nome: {$user->name} E-mail: {$user->email}</p>";
+        }
     }
 }

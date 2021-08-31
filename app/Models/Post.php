@@ -19,8 +19,13 @@ class Post extends Model
     ];
 
     public function setTitleAttribute($value)
-    {
+    { 
         $this->attributes['title'] = $value;
         $this->attributes['slug'] = Str::slug($value);
+    }
+
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'user', 'id');
     }
 }
