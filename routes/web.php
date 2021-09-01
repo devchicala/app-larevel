@@ -5,7 +5,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\Form\TestController;
 use App\Http\Controllers\PostController;
+use App\Http\Resources\UserCollection;
 use Illuminate\Support\Facades\Route;
+
+use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,3 +61,6 @@ Route::get('/endereco/{address}', [AddressController::class,'show']);
 Route::get('/artigo/{post}', [PostController::class,'show']);
 Route::get('/categoria/{category}', [CategoryController::class,'show']);
 
+Route::get('/user/{id}', function ($id) {
+    return new UserCollection(User::findOrFail($id));
+});
