@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserResourse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +26,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function show($id)
+    public function showw($id)
     {
         $user = User::where('id', $id)->first();
         //dd($user);
@@ -49,5 +50,51 @@ class UserController extends Controller
                 echo "<p>#{$post->id}, {$post->title}, {$post->content}";
             }
         }
+    }
+
+    public function index()
+    {
+        $users = User::paginate(10);
+        return UserResourse::collection($users);
+    }
+
+    public function store(Request $request)
+    {
+        $user = new User();
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        if($user->save())
+        {
+           return new UserResourse($user);
+        } 
+    }
+
+    public function show($id)
+    {
+        $user = User::findOrFail($id);
+        return new UserResourse($user);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = $request->password;
+        if($user->save())
+        {
+           return new UserResourse($user);
+        } 
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        if($user->delete())
+        {
+            return new UserResourse($user);
+        }
+        
     }
 }
