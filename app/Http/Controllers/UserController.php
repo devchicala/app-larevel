@@ -6,95 +6,130 @@ use App\Http\Resources\UserResourse;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
+//use DB;
+//use Hash;
+    
+use App\Http\Controllers\Controller;
+use Spatie\Permission\Models\Role;
+
+use Illuminate\Support\Arr;
 
 class UserController extends Controller
 {
-    public function listUser()
+    public function index(Request $request)
     {
-        /*$user = new User();
-        $user->name = 'Délcio Francisco';
-        $user->email = 'delciofrancisco1@gmail.com';
-        $user->password = Hash::make('123');
-        $user->save();*/
-
-        //echo"<h1>Listagem de Usuários</h1>";
-
-        $user = User::where('id', '=', 1)->first();
-        //dd($user);
-        return view('listUser', [
-            'user' => $user
-        ]);
+        $data = User::orderBy('id', 'DESC')->paginate(5);
+        return view('users.index', compact('data'))
+            ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
-    public function showw($id)
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
     {
-        $user = User::where('id', $id)->first();
-        //dd($user);
-        if ($user) {
-            echo "<h1>Dados do usuário</h1>";
-            echo "<p>Nome: {$user->name} E-mail: {$user->email}</p>";
-        }
-
-        $address = $user->address()->first();
-
-        if ($address) {
-            echo "<h1>Endereço</h1>";
-            echo "<p>Endereço Completo: {$address->street}, {$address->number}, {$address->city}, {$address->state}</p>";
-        }
-
-        $posts = $user->posts()->get();
-
-        if ($posts) {
-            echo "<h1>Artigos</h1>";
-            foreach ($posts as $post) {
-                echo "<p>#{$post->id}, {$post->title}, {$post->content}";
-            }
-        }
+        $roles = Role::pluck('name', 'name')->all();
+        return view('users.create', compact('roles'));
     }
 
-    public function index()
-    {
-        $users = User::paginate(10);
-        return UserResourse::collection($users);
-    }
-
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
     public function store(Request $request)
     {
-        $user = new User();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        if($user->save())
-        {
-           return new UserResourse($user);
-        } 
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|same:confirm-password',
+            'roles' => 'required'
+        ]);
+
+        $input = $request->all();
+        $input['password'] = Hash::make($input['password']);
+
+        $user = User::create($input);
+        $user->assignRole($request->input('roles'));
+
+        return redirect()->route('users.index')
+            ->with('success', 'User created successfully');
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function show($id)
     {
-        $user = User::findOrFail($id);
-        return new UserResourse($user);
+        $user = User::find($id);
+        return view('users.show', compact('user'));
     }
 
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($id)
+    {
+        $user = User::find($id);
+        $roles = Role::pluck('name', 'name')->all();
+        $userRole = $user->roles->pluck('name', 'name')->all();
+
+        return view('users.edit', compact('user', 'roles', 'userRole'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function update(Request $request, $id)
     {
-        $user = User::findOrFail($id);
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = $request->password;
-        if($user->save())
-        {
-           return new UserResourse($user);
-        } 
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'password' => 'same:confirm-password',
+            'roles' => 'required'
+        ]);
+
+        $input = $request->all();
+        if (!empty($input['password'])) {
+            $input['password'] = Hash::make($input['password']);
+        } else {
+            $input = Arr::except($input, array('password'));
+        }
+
+        $user = User::find($id);
+        $user->update($input);
+        DB::table('model_has_roles')->where('model_id', $id)->delete();
+
+        $user->assignRole($request->input('roles'));
+
+        return redirect()->route('users.index')
+            ->with('success', 'User updated successfully');
     }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
     public function destroy($id)
     {
-        $user = User::findOrFail($id);
-        if($user->delete())
-        {
-            return new UserResourse($user);
-        }
-        
+        User::find($id)->delete();
+        return redirect()->route('users.index')
+            ->with('success', 'User deleted successfully');
     }
 }
