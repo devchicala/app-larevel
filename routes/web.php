@@ -6,6 +6,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\Form\TestController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RoleController;
 use App\Http\Resources\UserCollection;
 use Illuminate\Support\Facades\Route;
 
@@ -53,7 +54,7 @@ Route::post('usuarios/store', [TestController::class,'storeUSer'])->name('users.
 
 /* --- ---- ---*/
 
-Route::get('/', [PostController::class,'showForm']);
+//Route::get('/', [PostController::class,'showForm']);
 Route::post('/debug', [PostController::class,'debug'])->name('debug');
 
 /* RELATIONSHIP */
