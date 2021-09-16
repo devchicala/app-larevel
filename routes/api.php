@@ -3,7 +3,7 @@
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\RoleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -28,3 +28,10 @@ Route::get('/users/{id}', [UserController::class, 'show']);
 Route::put('/users/{id}', [UserController::class, 'update']);
 
 Route::delete('/users/{id}', [UserController::class, 'destroy']);
+
+
+Route::resource('roles', RoleController::class);
+
+Route::resource('users', UserController::class);
+
+Route::resource('products', ProductController::class);
